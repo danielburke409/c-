@@ -1,0 +1,635 @@
+//Copyright Daniel Burke 2020
+//Reuse for educational purposes only - if you really want to!
+//Basic autopilot model v 1.0
+
+//using refers to files that the compiler needs to search for when compiling the code - we need to tell  
+// it where to look
+//very basic model....of an autopilot - experimenting really.
+
+using System;
+
+namespace Program
+{
+                                                 
+ 
+public class Program
+
+{
+                public static void Main()
+
+                {
+
+			////////SOME CONSTANTS ARE SET TO DEFINE SAFETY PERFORMANCE
+                                
+			string airspeed_reading;
+			string altitude_reading;
+			string start_heading;
+			string vertical_speed;
+			string input_one;
+			string new_fl;
+			string post_thrust_1;
+			string select_vs;
+			double engine_thrust;
+
+
+			int initial_bank=0;
+			int initial_yaw=0;
+			int initial_pitch=0;
+			int max_vertical_speed=3000;
+			int max_speed=400;
+
+
+			//defining below as start of program for data entry purposes
+
+			/////////////////////////////////////////////////////////////////////////
+			//Console.BackgroundColor = ConsoleColor.White;
+			start:
+			
+			try{
+
+			Console.WriteLine("Hello, welcome to the autopilot!");
+			Console.WriteLine("Please enter current airspeed reading:");
+			airspeed_reading=Console.ReadLine();
+
+			if (string.IsNullOrEmpty(airspeed_reading))
+				{
+    				Console.WriteLine("Airspeed can't be empty! Input your airspeed once more");
+    					goto start;
+				}
+
+			else{
+
+			Console.WriteLine("You entered a value of: " + airspeed_reading);
+			int int_airspeed_reading=Convert.ToInt32(airspeed_reading);
+
+			if (int_airspeed_reading < 0){
+			Console.WriteLine("Please enter a valid number (number was less than zero");
+
+			goto start;
+
+			} else if (int_airspeed_reading == 0){
+			Console.WriteLine("Please enter a valid number (number was equal to zero)");
+
+			goto start;
+
+			}else if (int_airspeed_reading >max_speed){
+			Console.WriteLine("Maximum airspeed exceeded, set throttle to idle!!");			
+			
+			goto end;			
+
+			}
+			
+			else{}
+
+//			}catch(FormatException){
+
+				
+//			Console.WriteLine("Invalid data format entered - start again:");
+
+//			goto start;}
+			
+			// error check
+
+			// switch
+			
+			// if incorrect repeat process
+
+			///////////////////////////////////////////////////////////////////////////
+
+			
+
+			start_1:
+
+
+			Console.WriteLine("Please enter current altitude:");
+
+				
+			altitude_reading=Console.ReadLine();
+
+			if (string.IsNullOrEmpty(altitude_reading))
+				{
+    				Console.WriteLine("Altitude can't be empty! Input your altitude once more");
+    					goto start_1;
+				}
+
+
+			else{
+
+			Console.WriteLine("You entered a value of: " + altitude_reading);
+			int int_altitude_reading=Convert.ToInt32(altitude_reading);
+
+			if (int_altitude_reading < 0){
+			Console.WriteLine("Please enter a valid number (number was less than zero");
+
+			goto start_1;
+
+			} else if (int_altitude_reading == 0){
+			Console.WriteLine("Please enter a valid number (number was equal to zero)");
+
+			goto start_1;
+
+			}else if (int_altitude_reading >50000){
+			Console.WriteLine("Maximum altitude exceeded, descend!!");			
+			
+			goto end;			
+
+			}
+			
+			else{}
+			
+			}
+
+			//}catch(FormatException){
+
+			//	
+			//	Console.WriteLine("Invalid data format entered - start again:");
+
+			//	goto start_1;}
+
+			// if incorrect repeat process
+
+			///////////////////////////////////////////////////////////////////////////
+			
+
+						
+
+			start_2:
+
+			Console.WriteLine("Please enter current heading:");
+
+			start_heading=Console.ReadLine();
+
+			//error check
+
+			// switch
+
+			if (string.IsNullOrEmpty(start_heading))
+				{
+    				Console.WriteLine("Heading can't be empty! Input your heading once more");
+    					goto start_2;
+				}
+
+
+			else{
+
+			Console.WriteLine("You entered a value of: " + start_heading);
+			int int_start_heading=Convert.ToInt32(start_heading);
+
+			if (int_start_heading < 0){
+			Console.WriteLine("Please enter a valid number (number was less than zero");
+
+			goto start_2;
+
+			} else if (int_start_heading == 0){
+			Console.WriteLine("Please enter a valid number (number was equal to zero)");
+
+			goto start_2;
+
+			}else if (int_start_heading >50000){
+			Console.WriteLine("Maximum altitude exceeded, descend!!");			
+			
+			goto end;			
+
+			}
+			
+			else{}
+			
+			}
+
+			//}catch(FormatException){
+
+				
+			//	Console.WriteLine("Invalid data format entered - start again:");
+
+			//	goto start_2;}
+
+			// if incorrect repeat process
+
+			
+
+			start_3:
+
+			//////////////////////////////////////////////////////////////////////////
+
+			Console.WriteLine("Vertical speed = 0 feet / minute ? Y/N:");
+
+			//error check - assume Y for first iteration
+
+			// switch
+
+			vertical_speed=Console.ReadLine();
+			
+			if (string.IsNullOrEmpty(vertical_speed))
+				{
+    				Console.WriteLine("Input is empty, please enter Y or N");
+    					goto start_3;
+				}
+
+
+			else{
+			
+			char int_vertical_speed=Convert.ToChar(vertical_speed);
+
+			int int_vertical_speed_num=0;
+
+			//Console.WriteLine(int_vertical_speed);
+
+			if(int_vertical_speed == 'Y' || int_vertical_speed == 'y'){
+				Console.WriteLine("You entered a value of: " + vertical_speed);
+
+				Console.WriteLine("Calculations performed on basis of 0 vertical speed:");
+
+			// switch to select what change to be performed
+
+
+				Console.WriteLine("Please select form the following options:");
+				Console.WriteLine("Flight level change - Number 1 (1)");
+				Console.WriteLine("Airspeed change - Number 2 (2)");
+				Console.WriteLine("Direction change - Number 3 (3)");
+				//Console.WriteLine("Airspeed change - Number 4 (4)");
+
+				input_one=Console.ReadLine();
+
+				int int_input_one=Convert.ToInt32(input_one);
+
+				switch(int_input_one){
+
+				case 1:
+
+				flight_level_change:
+				
+				Console.WriteLine("You have selected number 1 - flight level change.");
+
+				Console.WriteLine("Please enter the new flight level:");
+
+				new_fl=Console.ReadLine();
+
+				if (string.IsNullOrEmpty(new_fl))
+				{
+    				Console.WriteLine("Input is empty, please enter a valid number");
+    					goto flight_level_change;
+				}
+
+
+				else{
+				
+
+				int int_new_fl=Convert.ToInt32(new_fl);
+				int int_altitude_start=Convert.ToInt32(altitude_reading);
+				
+				if (int_new_fl==int_altitude_start)
+					{Console.WriteLine("Value entered is equal to current altitude. 					Exiting program.");
+					break;}
+						
+
+				else if (int_new_fl==0)
+				
+					{Console.WriteLine("Value entered is equal to zero. Exiting program.");
+					goto end;}
+						
+				else if (int_new_fl<0)
+					{Console.WriteLine("Value entered is less than zero. 					Exiting program.");
+					goto end;}
+						
+				
+				else if (int_new_fl>50000)
+					{Console.WriteLine("Value entered exceeds altitude ceiling for aircraft. 					Exiting program.");
+					goto end;}
+
+				else if (int_new_fl<int_altitude_start)
+					{Console.WriteLine("Value entered is less than current altitude. Commencing descent mode.");
+
+					//////// DESCENT CONTROL
+
+					bool check =false;
+
+					thrust(check, int_altitude_start, int_new_fl, int_airspeed_reading, int_vertical_speed_num);
+
+
+					Console.WriteLine("Do you wish to return to the start? Y to return or N to exit:");
+					
+					post_thrust_1=Console.ReadLine();
+
+					char post_thrust_2=Convert.ToChar(post_thrust_1);
+
+					switch(post_thrust_2){
+
+					case 'Y': goto start;
+					case 'y': goto start;
+
+				
+					case 'N': goto end;
+					case 'n': goto end;
+				
+					default: Console.WriteLine("Exiting by default.");
+					goto end;
+				
+					}
+
+					//thrust(check, check, check, check, check);
+					
+					//CALL THROTTLE
+
+					//THROTTLE FUNCTION NEED TO DETERMINE VARIABLES
+					//AT MAX THROTTLE LIMIT PITCH & VERTICAL SPEED
+
+					//CALL PITCH
+					// SET MAX PITCH OF 20 DEGREES
+
+
+					//VERTICAL SPEED CONTROLLER
+
+					//ALLOW VERTICAL SPEED INCREASE WHILST THROTTLE <85% & PITCH < 20 DEGREES
+
+
+
+					goto end;}
+				
+				else if (int_new_fl>int_altitude_start)
+					{Console.WriteLine("Value entered is greater than current altitude. Commencing ascent mode.");
+					
+					bool check =true;
+
+					thrust(check, int_altitude_start, int_new_fl, int_airspeed_reading, int_vertical_speed_num);
+
+					//////// ASCENT CONTROL
+
+					//CALL THROTTLE
+					//CALL PITCH
+					//VERTICAL SPEED CONTROLLER
+						
+
+					goto end;}
+
+				else	{goto end;}
+
+
+				}
+				
+		
+				break;
+				
+				case 2:
+				Console.WriteLine("You have selected number 2 - airspeed change.");
+				break;
+
+				case 3:
+				Console.WriteLine("You have selected number 3 - direction change.");
+				break;
+				
+				default:
+				Console.WriteLine("You have not made a valid selection and will return to the start.");
+				goto start;
+				}
+
+
+			///////////////////////////////////////////////////////////////////////////
+
+
+			}
+
+			else if(int_vertical_speed == 'N' || int_vertical_speed == 'n'){
+				Console.WriteLine("You entered a value of: " + vertical_speed);
+
+			
+			///////////////////////////////////////////////////////////////////////////
+
+
+
+
+			}
+
+			else{Console.WriteLine("Invalid entry made - please enter either Y or N, lower case is accepted");
+				goto start_3;}
+
+			}
+
+
+			// if incorrect repeat process
+
+			
+				end:
+
+                                airspeed();
+                                altimeter();
+                              //  thrust();
+                                pitch();
+                                bank();
+                                yaw();
+                                var g = new controller();
+                                controller.control();
+
+					
+		
+			}
+			
+			}catch(FormatException){
+
+				
+				Console.WriteLine("Invalid data format entered - start again:");
+
+				goto start;}
+			
+
+                }
+               
+                public class controller
+                {
+                                public static void control()
+                                {
+                                                Console.WriteLine("Controller called");
+                                }
+                }
+               
+                public static void airspeed()
+                {
+                               
+                                Console.WriteLine("Airspeed data");
+                }
+               
+                public static void altimeter()
+                {
+                                Console.WriteLine("Altitude data");
+                }
+               
+		// WHAT INPUT DOES THE AUTO-THROTTLE NEED?
+		// CURRENT AND FINAL ALTITUDE IS PROBABLY USEFUL
+		// CURRENT AIRSPEED
+		//RATE OF DESCENT
+		//USE AN ARRAY TO STORE ENGINE THRUST VALUES FOR SET RATE OF DESCENT PROFILES?
+		//MAYBE DO CALCULATION AND UPDATE CONTINUOUSLY?
+
+                public static void thrust(bool a, int start_altitude, int final_altitude, int airspeed, int vertical_speed)
+                {
+				start_1_:
+				string select_vs;
+
+				try{
+				
+				if (a==true)
+				{
+                                Console.WriteLine("Thrust data for ascent:");
+				Console.WriteLine("Start altitude:" + start_altitude);
+				Console.WriteLine("Final altitude:" + final_altitude);
+				Console.WriteLine("Start airspeed:" + airspeed);
+				Console.WriteLine("Start vertical speed:" + vertical_speed);
+
+				
+				
+				Console.WriteLine("Please input the desired vertical speed (MAX OF 3000):");
+				
+				select_vs=Console.ReadLine();
+				
+
+				if (string.IsNullOrEmpty(select_vs))
+				{
+    				Console.WriteLine("Vertical speed cannot be empty! Input your vertical speed once more");
+    					goto start_1_;
+				}
+
+
+				else{
+	
+				Console.WriteLine("You entered a value of: " + select_vs);
+				int int_select_vs=Convert.ToInt32(select_vs);
+	
+				if (int_select_vs < 0){
+				Console.WriteLine("Please enter a valid number (number was less than zero");
+	
+				goto start_1_;
+	
+				} else if (int_select_vs == 0){
+				Console.WriteLine("Please enter a valid number (number was equal to zero)");
+	
+				goto start_1_;
+	
+				}else if (int_select_vs >3000){
+				Console.WriteLine("Maximum value exceeded, re-enter a value!!");			
+			
+				goto start_1_;			
+
+				}	
+			
+				else{}
+			
+				//}
+				
+				//DEAL WITH OVER/UNDER SHOOTING
+
+				int ascent_diff=final_altitude-start_altitude;
+
+				double _HasRemainder = (ascent_diff % int_select_vs);
+
+
+					
+				if (_HasRemainder == 0)
+				{
+				}
+
+				else{}
+
+				//DEAL WITH OVER/UNDER SHOOTING
+				
+
+				do{start_altitude = (start_altitude + int_select_vs);
+
+				Console.WriteLine("Altitude is " + start_altitude);}
+				
+				while (start_altitude < final_altitude);
+				
+				Console.WriteLine("Current altitude is: " + final_altitude);
+
+				}
+
+				}
+				
+
+				else{
+				Console.WriteLine("Thrust data for descent:");
+				Console.WriteLine("Start altitude:" + start_altitude);
+				Console.WriteLine("Final altitude:" + final_altitude);
+				Console.WriteLine("Start airspeed:" + airspeed);
+				Console.WriteLine("Start vertical speed:" + vertical_speed);
+
+
+				//DESCENT CALCULATIONS HERE
+
+				Console.WriteLine("Please input the desired vertical speed (MAX OF 3000):");
+				
+				select_vs=Console.ReadLine();
+				
+
+				if (string.IsNullOrEmpty(select_vs))
+				{
+    				Console.WriteLine("Vertical speed cannot be empty! Input your vertical speed once more");
+    					goto start_1_;
+				}
+
+
+				else{
+	
+				Console.WriteLine("You entered a value of: " + select_vs);
+				int int_select_vs=Convert.ToInt32(select_vs);
+	
+				if (int_select_vs < 0){
+				Console.WriteLine("Please enter a valid number (number was less than zero");
+	
+				goto start_1_;
+	
+				} else if (int_select_vs == 0){
+				Console.WriteLine("Please enter a valid number (number was equal to zero)");
+	
+				goto start_1_;
+	
+				}else if (int_select_vs >3000){
+				Console.WriteLine("Maximum value exceeded, re-enter a value!!");			
+			
+				goto start_1_;			
+
+				}	
+			
+				else{}
+			
+				//}
+
+				do{start_altitude = (start_altitude - int_select_vs);
+
+				Console.WriteLine("Altitude is " + start_altitude);}
+				
+				while (start_altitude > final_altitude);
+				
+				Console.WriteLine("Current altitude is: " + start_altitude);
+
+				}
+
+				}
+				
+				
+
+				//}
+	
+
+				}catch(FormatException){Console.WriteLine("Invalid data format entered - please start again:"); goto start_1_;}
+				
+				
+				//return 0;
+                }
+               
+                public static void pitch()
+                {
+                                Console.WriteLine("Pitch data");
+                }
+               
+                public static void bank()
+                {
+                                Console.WriteLine("Bank data");
+                }
+               
+                public static void yaw()
+                {
+                                Console.WriteLine("Yaw data");
+                }
+               
+            
+}//end of program class
+}//end of namespace
